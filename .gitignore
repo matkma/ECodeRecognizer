@@ -4,26 +4,52 @@
 # User-specific files
 *.suo
 *.user
+<<<<<<< HEAD
 *.sln.docstates
 
+=======
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
+<<<<<<< HEAD
 x64/
 build/
+=======
+[Rr]eleases/
+x64/
+x86/
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 bld/
 [Bb]in/
 [Oo]bj/
 
+<<<<<<< HEAD
 # Roslyn cache directories
 *.ide/
+=======
+# Visual Studio 2015 cache/options directory
+.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+<<<<<<< HEAD
 #NUNIT
+=======
+# NUNIT
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 *.VisualState.xml
 TestResult.xml
 
@@ -32,6 +58,13 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+<<<<<<< HEAD
+=======
+# DNX
+project.lock.json
+artifacts/
+
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 *_i.c
 *_p.c
 *_i.h
@@ -64,6 +97,10 @@ _Chutzpah*
 ipch/
 *.aps
 *.ncb
+<<<<<<< HEAD
+=======
+*.opendb
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 *.opensdf
 *.sdf
 *.cachefile
@@ -72,6 +109,10 @@ ipch/
 *.psess
 *.vsp
 *.vspx
+<<<<<<< HEAD
+=======
+*.sap
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 
 # TFS 2012 Local Workspace
 $tf/
@@ -84,7 +125,11 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
+<<<<<<< HEAD
 # JustCode is a .NET coding addin-in
+=======
+# JustCode is a .NET coding add-in
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 .JustCode
 
 # TeamCity is a build add-in
@@ -96,6 +141,10 @@ _TeamCity*
 # NCrunch
 _NCrunch_*
 .*crunch*.local.xml
+<<<<<<< HEAD
+=======
+nCrunchTemp_*
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 
 # MightyMoose
 *.mm.*
@@ -123,6 +172,7 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
+<<<<<<< HEAD
 ## TODO: Comment the next line if you want to checkin your
 ## web deploy settings but do note that will include unencrypted
 ## passwords
@@ -152,6 +202,48 @@ sql/
 *.Cache
 ClientBin/
 [Ss]tyle[Cc]op.*
+=======
+# TODO: Comment the next line if you want to checkin your web deploy settings 
+# but database connection strings (with potential passwords) will be unencrypted
+*.pubxml
+*.publishproj
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+# NuGet v3's project.json files produces more ignoreable files
+*.nuget.props
+*.nuget.targets
+
+# Microsoft Azure Build Output
+csx/
+*.build.csdef
+
+# Microsoft Azure Emulator
+ecf/
+rcf/
+
+# Microsoft Azure ApplicationInsights config file
+ApplicationInsights.config
+
+# Windows Store app package directory
+AppPackages/
+BundleArtifacts/
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!*.[Cc]ache/
+
+# Others
+ClientBin/
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 ~$*
 *~
 *.dbmdl
@@ -159,6 +251,10 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
+<<<<<<< HEAD
+=======
+orleans.codegen.cs
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
 
 # RIA/Silverlight projects
 Generated_Code/
@@ -183,7 +279,35 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 
+<<<<<<< HEAD
 # LightSwitch generated files
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+=======
+# GhostDoc plugin setting file
+*.GhostDoc.xml
+
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+
+# Visual Studio 6 build log
+*.plg
+
+# Visual Studio 6 workspace options file
+*.opt
+
+# Visual Studio LightSwitch build output
+**/*.HTMLClient/GeneratedArtifacts
+**/*.DesktopClient/GeneratedArtifacts
+**/*.DesktopClient/ModelManifest.xml
+**/*.Server/GeneratedArtifacts
+**/*.Server/ModelManifest.xml
+_Pvt_Extensions
+
+# Paket dependency manager
+.paket/paket.exe
+
+# FAKE - F# Make
+.fake/
+>>>>>>> 723e1bdb755d082608e4e65c767946c3e173622f
