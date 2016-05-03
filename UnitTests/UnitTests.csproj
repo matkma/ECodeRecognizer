@@ -1,18 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\OpenCvSharp-AnyCPU.2.4.10.20160316\build\OpenCvSharp-AnyCPU.props" Condition="Exists('..\packages\OpenCvSharp-AnyCPU.2.4.10.20160316\build\OpenCvSharp-AnyCPU.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E03A9A1E-A434-4DA9-8A04-CAC2349F15F9}</ProjectGuid>
+    <ProjectGuid>{236A1EC8-F529-4FDB-B9EA-28979D1D1953}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PreparationEngine</RootNamespace>
-    <AssemblyName>PreparationEngine</AssemblyName>
+    <RootNamespace>UnitTests</RootNamespace>
+    <AssemblyName>UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>dbce6262</NuGetPackageImportStamp>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>f288d403</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +41,10 @@
       <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OpenCvSharp.Blob, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.Blob.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OpenCvSharp.CPlusPlus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.CPlusPlus.dll</HintPath>
       <Private>True</Private>
@@ -44,29 +53,65 @@
       <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenCvSharp-AnyCPU.2.4.10.20160316\lib\net45\OpenCvSharp.UserInterface.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <Compile Include="CannyDetector.cs" />
-    <Compile Include="Engine.cs" />
+    <Compile Include="PreparationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Thresholder.cs" />
+    <Compile Include="DetectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DetectionEngine\DetectionEngine.csproj">
       <Project>{d7b8ce46-b349-4bce-95f6-2e4f9d89717d}</Project>
       <Name>DetectionEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProgressPipeline\ControlPipeline.csproj">
-      <Project>{20ffdb80-7fa0-4dd8-9658-0f8666ee1f47}</Project>
-      <Name>ControlPipeline</Name>
+    <ProjectReference Include="..\PreparationEngine\PreparationEngine.csproj">
+      <Project>{e03a9a1e-a434-4da9-8a04-cac2349f15f9}</Project>
+      <Name>PreparationEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

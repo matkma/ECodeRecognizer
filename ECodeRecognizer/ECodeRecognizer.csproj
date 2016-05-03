@@ -76,10 +76,6 @@
       <Project>{B3440DFE-EB20-4A8C-8930-4F43DDECD7DA}</Project>
       <Name>CommonResources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DatabaseLayer\DatabaseLayer.csproj">
-      <Project>{dbaee465-3ab7-4842-87c5-b055ced975b8}</Project>
-      <Name>DatabaseLayer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PreparationEngine\PreparationEngine.csproj">
       <Project>{e03a9a1e-a434-4da9-8a04-cac2349f15f9}</Project>
       <Name>PreparationEngine</Name>

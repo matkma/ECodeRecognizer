@@ -3,21 +3,21 @@ using CommonResources;
 
 namespace ControlPipeline
 {
-    public delegate void ErrorEventHandler(Object source, ErrorEventArgs e);
+    public delegate void ErrorEventHandler(object source, ErrorEventArgs e);
 
     public class ErrorEventArgs
     {
-        EventOutput output = new EventOutput();
+        private EventOutput _output = new EventOutput();
         
         public ErrorEventArgs(string text, DateTime dt)
         {
-            output.eventInfo = text;
-            output.beginDateTime = dt;
+            _output.EventInfo = text;
+            _output.BeginDateTime = dt;
         }
 
         public EventOutput GetInfo()
         {
-            return output;
+            return _output;
         }
     }
 }

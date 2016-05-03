@@ -1,24 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ControlPipeline;
+using OpenCvSharp;
 using OpenCvSharp.CPlusPlus;
 
 namespace DetectionEngine
 {
     public class Engine
     {
-        private RecognitionEngine.Engine recognitionEngine = new RecognitionEngine.Engine();
+        private readonly RecognitionEngine.Engine _recognitionEngine = new RecognitionEngine.Engine();
 
-        public void Input(Mat input)
+        public void Input(List<Mat> input)
         {
             ProgressPipe.Instance.ProgressMessage("Wykrywanie E-kodów...");
-            Process(input);
+            var output = Process(input);
+            _recognitionEngine.Input(output);
         }
 
-        private void Process(Mat input)
+        public List<Mat> Process(List<Mat> input)
         {
-            input.Resize(new Size(100, 100));
-            var digits = new List<Mat> {input, input, input};
-            recognitionEngine.Input(digits);
+            var contourDetector = new ContourDetector();
+            var bounds = contourDetector.Detect(input[1]);
+            var image = input[2];
+            foreach (var bound in bounds)
+            {
+                Cv2.Rectangle(image, bound, new Scalar(0, 255, 0), 3);
+            }
+            using (new Window(bounds.Count.ToString(), image))
+            {
+               Cv2.WaitKey();
+            }
+            return input;
         }
     }
 }

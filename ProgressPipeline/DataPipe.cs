@@ -7,16 +7,16 @@ namespace ControlPipeline
     {
         public event DataEventHandler DataEvent;
 
-        private static DataPipe instance;
+        private static DataPipe _instance;
         public static DataPipe Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new DataPipe();
+                    _instance = new DataPipe();
                 }
-                return instance;
+                return _instance;
             }
         }
 

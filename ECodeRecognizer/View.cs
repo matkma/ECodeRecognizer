@@ -7,8 +7,8 @@ namespace ECodeRecognizer
 {
     public partial class View : Form
     {
-        private Bitmap image;
-        private PreparationEngine.Engine engine = new PreparationEngine.Engine();
+        private Bitmap _image;
+        private readonly PreparationEngine.Engine _engine = new PreparationEngine.Engine();
 
         public View()
         {
@@ -29,11 +29,12 @@ namespace ECodeRecognizer
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
             try
             {
-                image = new Bitmap(openFileDialog.FileName);
-                imageBox.Image = image;
+                _image = new Bitmap(openFileDialog.FileName);
+                imageBox.Image = _image;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ErrorPipe.Instance.ErrorMessage(this, "Nie udało się załadować obrazu.\n" + ex.Message);
                 return;
             }
 
@@ -42,15 +43,15 @@ namespace ECodeRecognizer
 
         private void btn_Process_Click(object sender, EventArgs e)
         {
-            if (image != null)
+            if (_image != null)
             {
-                engine.Input(image);
+                _engine.Input(_image);
             }
         }
 
         private void HandleProgressEvent(object sender, ProgressEventArgs args)
         {
-            progressLabel.Text = args.GetInfo().eventInfo;
+            progressLabel.Text = args.GetInfo().EventInfo;
         }
 
         private void HandleDataEvent(object sender, DataEventArgs args)
@@ -59,10 +60,10 @@ namespace ECodeRecognizer
             resultBox.Items.Clear();
             foreach (var ecode in args.GetInfo())
             {
-                var item = ecode.code + ": " + ecode.name;
-                if (ecode.description != "")
+                var item = ecode.Code + ": " + ecode.Name;
+                if (ecode.Description != "")
                 {
-                    item += " (" + ecode.description + ")";
+                    item += " (" + ecode.Description + ")";
                 }
                 resultBox.Items.Add(item);
             }
@@ -71,8 +72,8 @@ namespace ECodeRecognizer
         private void HandleErrorEvent(object sender, ErrorEventArgs args)
         {
             progressLabel.Text = "Przetwarzanie nieudane.";
-            MessageBox.Show(args.GetInfo().eventInfo + 
-                            "\nData zalogowania błędu: " + args.GetInfo().beginDateTime, 
+            MessageBox.Show(args.GetInfo().EventInfo + 
+                            "\nData zalogowania błędu: " + args.GetInfo().BeginDateTime, 
                             "ERROR");
         }
     }

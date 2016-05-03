@@ -4,20 +4,20 @@ using CommonResources;
 
 namespace ControlPipeline
 {
-    public delegate void DataEventHandler(Object source, DataEventArgs e);
+    public delegate void DataEventHandler(object source, DataEventArgs e);
 
     public class DataEventArgs : EventArgs
     {
-        private List<ECode> ecodes ;
+        private List<ECode> _ecodes ;
 
         public DataEventArgs(List<ECode> arg)
         {
-            ecodes = arg;
+            _ecodes = arg;
         }
 
         public List<ECode> GetInfo()
         {
-            return ecodes;
+            return _ecodes;
         }
     }
 }

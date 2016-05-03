@@ -9,8 +9,7 @@ namespace DatabaseLayer
 {
     public class DatabaseConnection
     {
-        public event DataEventHandler DatabaseEvent;
-        private int maxCodeLength = 3;
+        private const int MaxCodeLength = 3;
 
         public void Input(int input)
         {
@@ -28,9 +27,9 @@ namespace DatabaseLayer
                 SendData(ecodes);
                 connection.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                ErrorPipe.Instance.ErrorMessage(this, "Nie udało się połączyć z bazą danych.");
+                ErrorPipe.Instance.ErrorMessage(this, "Nie udało się połączyć z bazą danych.\n" + e.Message);
             }
    
         }
@@ -46,12 +45,12 @@ namespace DatabaseLayer
             {
                 var ecode = new ECode
                 {
-                    id = Convert.ToInt32(reader["Id"]),
-                    code = Convert.ToString(reader["Code"]),
-                    name = Convert.ToString(reader["Name"]),
-                    description = Convert.ToString(reader["Description"])
+                    Id = Convert.ToInt32(reader["Id"]),
+                    Code = Convert.ToString(reader["Code"]),
+                    Name = Convert.ToString(reader["Name"]),
+                    Description = Convert.ToString(reader["Description"])
                 };
-                if (ecode.code.Count(char.IsDigit) <= maxCodeLength)
+                if (ecode.Code.Count(char.IsDigit) <= MaxCodeLength)
                 {
                     ecodes.Add(ecode);
                 }

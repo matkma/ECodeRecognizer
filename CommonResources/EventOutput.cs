@@ -4,7 +4,7 @@ namespace CommonResources
 {
     public class EventOutput
     {
-        public string eventInfo {get; set; }
-        public DateTime beginDateTime { get; set; }
+        public string EventInfo {get; set; }
+        public DateTime BeginDateTime { get; set; }
     }
 }

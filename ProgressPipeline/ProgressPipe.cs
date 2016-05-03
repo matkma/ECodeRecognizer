@@ -6,16 +6,16 @@ namespace ControlPipeline
     {
         public event ProgressEventHandler ProgressEvent;
 
-        private static ProgressPipe instance;
+        private static ProgressPipe _instance;
         public static ProgressPipe Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new ProgressPipe();
+                    _instance = new ProgressPipe();
                 }
-                return instance;
+                return _instance;
             }
         }
 

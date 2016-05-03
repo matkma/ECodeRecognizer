@@ -7,15 +7,16 @@ namespace RecognitionEngine
 {
     public class Engine
     {
-        private DatabaseLayer.DatabaseConnection databaseConnection = new DatabaseLayer.DatabaseConnection();
+        private readonly DatabaseLayer.DatabaseConnection _databaseConnection = new DatabaseLayer.DatabaseConnection();
 
         public void Input(List<Mat> input)
         {
             ProgressPipe.Instance.ProgressMessage("Rozpoznawanie cyfr...");
-            Process(input);
+            var output = Process(input);
+            _databaseConnection.Input(output);
         }
 
-        private void Process(List<Mat> input)
+        private int Process(List<Mat> input)
         {
             var output = "";
             Random rand = new Random();
@@ -26,7 +27,7 @@ namespace RecognitionEngine
                 output += x.ToString();
             }
 
-            databaseConnection.Input(int.Parse(output.Trim()));
+            return int.Parse(output.Trim());
         }
     }
 }

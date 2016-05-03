@@ -6,16 +6,16 @@ namespace ControlPipeline
     {
         public event ErrorEventHandler ErrorEvent;
 
-        private static ErrorPipe instance;
+        private static ErrorPipe _instance;
         public static ErrorPipe Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new ErrorPipe();
+                    _instance = new ErrorPipe();
                 }
-                return instance;
+                return _instance;
             }
         }
 
