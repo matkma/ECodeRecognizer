@@ -19,16 +19,12 @@ namespace DetectionEngine
 
         public List<Mat> Process(List<Mat> input)
         {
-            var contourDetector = new ContourDetector();
-            var bounds = contourDetector.Detect(input[1]);
+            var contourDetector = new LettersDetector();
+            var bounds = contourDetector.DetectLetters(input[1]);
             var image = input[2];
             foreach (var bound in bounds)
             {
-                Cv2.Rectangle(image, bound, new Scalar(0, 255, 0), 3);
-            }
-            using (new Window(bounds.Count.ToString(), image))
-            {
-               Cv2.WaitKey();
+                Cv2.Rectangle(image, bound, new Scalar(0, 255, 0), 1);
             }
             return input;
         }

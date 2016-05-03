@@ -14,15 +14,15 @@ namespace UnitTests
         [TestMethod]
         public void ContourDetectorTest()
         {
-            var detector = new ContourDetector();
-            var bounds = detector.Detect(OpenCvSharp.Extensions.BitmapConverter.ToMat(new Bitmap(@"D:\Projektz\inżynierka\ECodeRecognizer\UnitTests\Test\TestData\DetectionTests\ContourDetectorTest\test.bmp")));
+            var detector = new LettersDetector();
+            var bounds = detector.DetectLetters(OpenCvSharp.Extensions.BitmapConverter.ToMat(new Bitmap(@"D:\Projektz\inżynierka\ECodeRecognizer\UnitTests\Test\TestData\DetectionTests\ContourDetectorTest\test.bmp")));
             var image = OpenCvSharp.Extensions.BitmapConverter.ToMat(new Bitmap(@"D:\Projektz\inżynierka\ECodeRecognizer\UnitTests\Test\TestData\DetectionTests\ContourDetectorTest\test1.bmp"));
             foreach (var bound in bounds)
             {
-                Cv2.Rectangle(image, bound, new Scalar(0, 255, 0), 3);
+                Cv2.Rectangle(image, bound, new Scalar(0, 255, 0));
             }
             bool result;
-            using (new Window(GetType().ToString() + " (wciśnij ENTER jeśli obraz jest poprawny)" + bounds.Count, image))
+            using (new Window(GetType().ToString() + " (wciśnij ENTER jeśli obraz jest poprawny)", image))
             {
                 result = (Key)Cv2.WaitKey() == Key.Escape;
                 if (result)

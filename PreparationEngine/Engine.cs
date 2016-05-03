@@ -25,17 +25,19 @@ namespace PreparationEngine
             var image = OpenCvSharp.Extensions.BitmapConverter.ToMat(input);
             var cannyDetector = new CannyDetector();
             var thresholder = new Thresholder();
+            image = image.PyrDown();
+            Mat gray;
             try
             {
-                image = image.CvtColor(ColorConversion.BgrToGray);
+                gray = image.CvtColor(ColorConversion.BgrToGray);
             }
             catch (Exception)
             {
-                // ignored
+                gray = image;
             }
-            list.Add(cannyDetector.Detect(image));
-            list.Add(thresholder.Process(image));
-            list.Add(image);
+            list.Add(cannyDetector.Detect(gray));
+            list.Add(thresholder.Process(gray));
+            list.Add(gray);
 
             return list;
         }
