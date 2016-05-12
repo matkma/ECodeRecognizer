@@ -6,7 +6,7 @@ namespace DetectionEngine
 {
     public class LettersDetector
     {
-        private readonly double _minFill = 0.10;
+        private readonly double _minFill = 0.20;
 
         public List<Rect> DetectLetters(Mat input)
         {

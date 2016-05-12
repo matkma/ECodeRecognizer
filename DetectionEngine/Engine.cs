@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using ControlPipeline;
 using OpenCvSharp;
 using OpenCvSharp.CPlusPlus;
@@ -30,11 +30,15 @@ namespace DetectionEngine
             {
                 digits.AddRange(ExtractCodes(image, capitalE));
             }
+
+            foreach (var bound in capitalEs)
+            {
+                Cv2.Rectangle(image, bound, new Scalar(0, 255, 0), 1);
+            }
             using (new Window(GetType().ToString() + " (wciśnij ENTER jeśli obraz jest poprawny)", image))
             {
                 Cv2.WaitKey();
             }
-
             return digits;
         }
 
@@ -43,9 +47,17 @@ namespace DetectionEngine
             var digits = new List<Mat>();
             var bound = new Rect(capitalE.Location, new Size(capitalE.Height / 2, capitalE.Height));
             image = image.Threshold(100, 255, ThresholdType.Binary);
-            digits.Add(new Mat(image, new Rect(new Point(bound.Right, bound.Top), bound.Size)));
-            digits.Add(new Mat(image, new Rect(new Point(bound.Right + bound.Width, bound.Top), bound.Size)));
-            digits.Add(new Mat(image, new Rect(new Point(bound.Right + 2 * bound.Width, bound.Top), bound.Size)));
+            try
+            {
+                digits.Add(new Mat(image, new Rect(new Point(bound.Right, bound.Top), bound.Size)));
+                digits.Add(new Mat(image, new Rect(new Point(bound.Right + bound.Width, bound.Top), bound.Size)));
+                digits.Add(new Mat(image, new Rect(new Point(bound.Right + 2 * bound.Width, bound.Top), bound.Size)));
+            }
+            catch (Exception)
+            {
+                ErrorPipe.Instance.ErrorMessage(this, "Bład wykrycia cyfr w E-kodzie w metodzie ExtractCodes. Przekroczono wymiar obrazu.");
+            }
+            return digits;
 
             //var bound = new Rect(capitalE.Location, new Size(capitalE.Height / 2, capitalE.Height));
             //Cv2.Rectangle(image, bound, new Scalar(0, 255, 0), 1);
@@ -53,9 +65,11 @@ namespace DetectionEngine
             //Cv2.Rectangle(image, new Rect(new Point(bound.Right, bound.Top), bound.Size), new Scalar(0, 255, 0), 1);
             //Cv2.Rectangle(image, new Rect(new Point(bound.Right + bound.Width, bound.Top), bound.Size), new Scalar(0, 255, 0), 1);
             //Cv2.Rectangle(image, new Rect(new Point(bound.Right + 2 * bound.Width, bound.Top), bound.Size), new Scalar(0, 255, 0), 1);
+            //using (new Window(GetType().ToString() + " (wciśnij ENTER jeśli obraz jest poprawny)", image))
+            //{
+             //   Cv2.WaitKey();
+            //}
             //return new List<Mat>();
-
-            return digits;
         }
     }
 }

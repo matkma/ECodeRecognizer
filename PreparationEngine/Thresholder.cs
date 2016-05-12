@@ -6,7 +6,7 @@ namespace PreparationEngine
     internal class Thresholder
     {
         private readonly Size _elementSizeEllipse = new Size(3, 3);
-        private readonly Size _elementSizeRect = new Size(1, 9);
+        private readonly Size _elementSizeRect = new Size(1, 3);
 
         public Mat Process(Mat input)
         {

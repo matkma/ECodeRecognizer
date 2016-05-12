@@ -9,7 +9,7 @@ namespace DetectionEngine
     public class EDetector
     {
         private readonly double _firstMinFill = 0.50;
-        private readonly double _lastMinFill = 0.33;
+        private readonly double _lastMaxFill = 0.20;
 
         public List<Rect> DetectCapitalE(Mat input, List<Rect> letters)
         {
@@ -26,6 +26,8 @@ namespace DetectionEngine
         {
             var firstCheck = false;
             var secondCheck = false;
+            var thirdCheck = false;
+            var thirdCol = 0;
 
             for (var i = 0; i < input.Cols; i++)
             {
@@ -38,19 +40,30 @@ namespace DetectionEngine
                 {
                     if (!secondCheck)
                     {
-                        secondCheck = CheckSecondCondition(col);
+                        secondCheck = CheckSecondCondition(col, 11);
                     }
                     else
                     {
-                        var thirdCheck = CheckFirstCondition(col, _lastMinFill);
+                        thirdCheck = CheckThirdCondition(col);
                         if (thirdCheck)
                         {
-                            return false;
+                            using (new Window(GetType().ToString() + " (wciśnij ENTER jeśli obraz jest poprawny)", input))
+                            {
+                                Cv2.WaitKey();
+                            }
+                            thirdCol = i;
+                            break;
                         }
                     }
                 }
             }
-            return secondCheck;
+            if (thirdCol != 0)
+            {
+                var index = (double)(thirdCol + input.Cols) / 2;
+                var col = input.Col[(int)Math.Floor(index)];
+                return CheckLastCondition(col);
+            }
+            return false;
         }
 
         private bool CheckFirstCondition(Mat col, double minFill)
@@ -59,9 +72,13 @@ namespace DetectionEngine
             return fill >= minFill;
         }
 
-        private bool CheckSecondCondition(Mat col)
+        private bool CheckSecondCondition(Mat col, int checkCount)
         {
-            bool[] checks = {false, false, false, false, false, false, false, false, false, false, false};
+            var checks = new bool[checkCount];
+            for (var i = 0; i < checkCount; i++)
+            {
+                checks[i] = false;
+            }
             var step = 0;
             var byte3Col = new MatOfByte3(col);
             var indexer = byte3Col.GetIndexer();
@@ -88,9 +105,22 @@ namespace DetectionEngine
             return checks.All(check => check);
         }
 
+        private bool CheckThirdCondition(Mat col)
+        {
+            //TODO
+            //Nie działa, bo trzy łapki E nie kończą się w tym samym miejscu (no przecież)
+            //Znaleźć inny ostatni warunek
+            return CheckSecondCondition(col, 5);
+        }
+
+        private bool CheckLastCondition(Mat col)
+        {
+            return !CheckFirstCondition(col, _lastMaxFill);
+        }
+
         private bool CheckPixel(Vec3b pixel)
         {
-            return pixel.Item0 + pixel.Item1 + pixel.Item2 == 3*255;
+            return pixel.Item0 + pixel.Item1 + pixel.Item2 >= 2*255;
         }
     }
 }
