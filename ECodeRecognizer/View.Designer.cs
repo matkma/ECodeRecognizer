@@ -114,6 +114,7 @@
             this.btn_teach.TabIndex = 5;
             this.btn_teach.Text = "UCZ";
             this.btn_teach.UseVisualStyleBackColor = false;
+            this.btn_teach.Click += new System.EventHandler(this.btn_teach_Click);
             // 
             // progressLabel
             // 

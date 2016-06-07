@@ -76,5 +76,11 @@ namespace ECodeRecognizer
                             "\nData zalogowania błędu: " + args.GetInfo().BeginDateTime, 
                             "ERROR");
         }
+
+        private void btn_teach_Click(object sender, EventArgs e)
+        {
+            var teacherView = new TeacherView();
+            teacherView.Show(this);
+        }
     }
 }
