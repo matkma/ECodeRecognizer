@@ -8,12 +8,12 @@ namespace DetectionEngine
 {
     public class EDetector
     {
-        private readonly double _firstMinFill = 0.50;
-        private readonly double _lastMaxFill = 0.20;
+        private readonly double _armMinFill = 0.70;
+        private readonly double _notArmMaxFill = 0.50;
+        private readonly double _emptyMaxFill = 0.25;
 
         public List<Rect> DetectCapitalE(Mat input, List<Rect> letters)
         {
-            input = input.Threshold(30, 255, ThresholdType.Binary);
             return (from letter 
                     in letters 
                     let mask = new Mat(input, letter) 
@@ -24,98 +24,108 @@ namespace DetectionEngine
 
         private bool FindCapitalE(Mat input)
         {
-            var firstCheck = false;
-            var secondCheck = false;
-            var thirdCheck = false;
-            var thirdCol = 0;
+            bool[] checks = {false, false, false, false, false, false};
+            int? testColumnIndex = null;
+            var testPixel = false;
+            var checkIndex = 0;
 
-            for (var i = 0; i < input.Cols; i++)
+            for (var i = 0; i < input.Rows; i++)
             {
-                var col = input.Col[i];
-                if (!firstCheck)
+                if (checkIndex == checks.Length) return true;
+                if (testColumnIndex != null)
                 {
-                    firstCheck = CheckFirstCondition(col, _firstMinFill);
+                    if (!CheckPixel(new MatOfByte3(input.Row[i]).GetIndexer()[0, testColumnIndex.Value]))
+                    {
+                        if (testPixel) return false;
+                        else
+                        {
+                            testPixel = true;
+                        }
+                    }      
+                }       
+                if (checkIndex%2 == 0)
+                {
+                    checks[checkIndex] = IsArm(input.Row[i]);
+                    if (checkIndex == 4 && testColumnIndex != null) testColumnIndex = null;
+                }
+                else if (checkIndex == checks.Length - 1)
+                {
+                    checks[checkIndex] = IsEmpty(input.Row[i]);
                 }
                 else
                 {
-                    if (!secondCheck)
+                    checks[checkIndex] = IsNotArm(input.Row[i], ref testColumnIndex);
+                }
+
+                if (checks[checkIndex])
+                {
+                    checkIndex++;
+                }
+            }
+
+            return checks.Last() || checks[4];
+        }
+
+        private bool IsArm(Mat row)
+        {
+            var fill = (double)Cv2.CountNonZero(row) / (double)row.Width;
+            return fill >= _armMinFill;
+        }
+
+        private bool IsNotArm(Mat row, ref int? index)
+        {
+            var fillCheck = false;
+            var shapeCheck = false;
+            var fill = (double)Cv2.CountNonZero(row) / (double)row.Width;
+            fillCheck = fill <= _notArmMaxFill;
+            if (fillCheck)
+            {
+                var byte3Col = new MatOfByte3(row);
+                var indexer = byte3Col.GetIndexer();
+                bool start = false, end = false, buffer = false;
+                for (var col = 0; col < row.Cols; col++)
+                {
+                    var pixel = indexer[0, col];
+                    if (!start)
                     {
-                        secondCheck = CheckSecondCondition(col, 11);
+                        if (!CheckPixel(pixel)) continue;
+                        start = true;
+                        if (index == null)
+                        {
+                            index = col + 2;
+                        }
+                    }
+                    else if (!end)
+                    {
+                        if (!buffer)
+                        {
+                            if (CheckPixel(pixel)) continue;
+                            buffer = true;
+                            if (index == col)
+                            {
+                                index = col - 1;
+                            }
+                        }
+                        else
+                        {
+                            if (!CheckPixel(pixel)) end = true;
+                        }
                     }
                     else
                     {
-                        thirdCheck = CheckThirdCondition(col);
-                        if (thirdCheck)
-                        {
-                            using (new Window(GetType().ToString() + " (wciśnij ENTER jeśli obraz jest poprawny)", input))
-                            {
-                                Cv2.WaitKey();
-                            }
-                            thirdCol = i;
-                            break;
-                        }
+                        if (CheckPixel(pixel)) end = false;
                     }
                 }
+
+                shapeCheck = start && end;
             }
-            if (thirdCol != 0)
-            {
-                var index = (double)(thirdCol + input.Cols) / 2;
-                var col = input.Col[(int)Math.Floor(index)];
-                return CheckLastCondition(col);
-            }
-            return false;
+            return shapeCheck && fillCheck;
         }
 
-        private bool CheckFirstCondition(Mat col, double minFill)
+        private bool IsEmpty(Mat row)
         {
-            var fill = (double)Cv2.CountNonZero(col) / (double)col.Height;
-            return fill >= minFill;
-        }
-
-        private bool CheckSecondCondition(Mat col, int checkCount)
-        {
-            var checks = new bool[checkCount];
-            for (var i = 0; i < checkCount; i++)
-            {
-                checks[i] = false;
-            }
-            var step = 0;
-            var byte3Col = new MatOfByte3(col);
-            var indexer = byte3Col.GetIndexer();
-            for (var row = 0; row < col.Rows; row++)
-            {
-                var pixel = indexer[row, 0];
-                if (step % 2 == 0)
-                {
-                    if (!CheckPixel(pixel)) continue;
-                    checks[step] = true;
-                    step++;
-                }
-                else
-                {
-                    if (CheckPixel(pixel)) continue;
-                    checks[step] = true;
-                    step++;
-                }
-                if (checks.Last())
-                {
-                    return true;
-                }
-            }
-            return checks.All(check => check);
-        }
-
-        private bool CheckThirdCondition(Mat col)
-        {
-            //TODO
-            //Nie działa, bo trzy łapki E nie kończą się w tym samym miejscu (no przecież)
-            //Znaleźć inny ostatni warunek
-            return CheckSecondCondition(col, 5);
-        }
-
-        private bool CheckLastCondition(Mat col)
-        {
-            return !CheckFirstCondition(col, _lastMaxFill);
+            var fill = (double)Cv2.CountNonZero(row) / (double)row.Width;
+            return fill <= _emptyMaxFill;
         }
 
         private bool CheckPixel(Vec3b pixel)
