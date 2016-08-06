@@ -142,6 +142,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "View";
             this.Text = "E-Code Recognizer";
+            this.Load += new System.EventHandler(this.View_Load);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

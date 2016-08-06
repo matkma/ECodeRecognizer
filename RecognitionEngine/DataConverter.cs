@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ControlPipeline;
+using OpenCvSharp.CPlusPlus;
 
 namespace RecognitionEngine
 {
-    internal static class DataConverter
+    public static class DataConverter
     {
         public static double[] DigitToNetworkOutput(int digit)
         {
@@ -42,11 +43,35 @@ namespace RecognitionEngine
                     result[(bitmap.Width * y) + x] = GetPixelValue(bitmap.GetPixel(x, y));
                 }
             }
+            return result;
+        }
+
+        public static double[] NetworkInputFromMat(Mat mat)
+        {
+            var byte3Col = new MatOfByte3(mat);
+            var indexer = byte3Col.GetIndexer();
+            var pixel = indexer[0, 1];
+
+            var result = new double[mat.Height*mat.Width];
+            for (int x = 0; x < mat.Width; x++)
+            {
+                for (int y = 0; y < mat.Height; y++)
+                {
+                    result[(mat.Width*y) + x] = GetIndexerValue(indexer[y, x]);
+                }
+            }
+            return result;
         }
 
         private static double GetPixelValue(Color pixel)
         {
             var value = (pixel.R + pixel.G + pixel.B);
+            return value >= 382 ? 1 : 0;
+        }
+
+        private static double GetIndexerValue(Vec3b pixel)
+        {
+            var value = (pixel.Item0 + pixel.Item1 + pixel.Item2);
             return value >= 382 ? 1 : 0;
         }
     }

@@ -82,5 +82,10 @@ namespace ECodeRecognizer
             var teacherView = new TeacherView();
             teacherView.Show(this);
         }
+
+        private void View_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

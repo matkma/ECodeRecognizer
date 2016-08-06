@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NeuralNetworks;
+using OpenCvSharp.CPlusPlus;
 
 namespace RecognitionEngine
 {
@@ -36,11 +37,18 @@ namespace RecognitionEngine
             Network = LoadNetwork();
         }
 
+        public string CalculateOutput(Mat data)
+        {   
+            Network.ApplyInput(DataConverter.NetworkInputFromMat(data));
+            Network.CalculateOutput();
+            return DataConverter.NetworkOutputToDigit(Network.ReadOutput());
+        }
+
         public void TrainNetwork(List<Bitmap> data, int digit)
         {
             var input = data.Select(bitmap => new DataSet
             {
-                Outputs = DataConverter.DigitToNetworkOutput(digit), 
+                Outputs = DataConverter.DigitToNetworkOutput(digit),
                 Inputs = DataConverter.NetworkInputFromBitmap(bitmap)
             }).ToList();
             var teacher = new Teacher();
@@ -54,7 +62,7 @@ namespace RecognitionEngine
                 var networkData = NeuralNetwork.ReadNetworkFromFile(@"Data/Network.xml");
                 return new BackPropogationNetwork(networkData);
             }
-            return new BackPropogationNetwork(450, 16, 250);
+            return new BackPropogationNetwork(36, 16, 24);
         }
     }
 }

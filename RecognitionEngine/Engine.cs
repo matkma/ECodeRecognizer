@@ -20,15 +20,11 @@ namespace RecognitionEngine
 
         private int Process(List<Mat> input)
         {
-            var output = "";
-            Random rand = new Random();
-
-            foreach (var digit in input)
+            string output = "";
+            foreach (var mat in input)
             {
-                int x = rand.Next(0, 9);
-                output += x.ToString();
+                output += NeuralNetworkController.Instance.CalculateOutput(mat);
             }
-
             return int.Parse(output.Trim());
         }
     }

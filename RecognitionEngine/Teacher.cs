@@ -19,7 +19,7 @@ namespace RecognitionEngine
             BackgroundWorker teacher = new BackgroundWorker();
             teacher.DoWork += delegate
             {
-                network.BatchBackPropogate(data.ToArray(), 10, 0.4, 0.2, teacher);
+                network.BatchBackPropogate(data.ToArray(), 40, 0.5, 0.2, teacher);
             };
 
             teacher.WorkerReportsProgress = true;
