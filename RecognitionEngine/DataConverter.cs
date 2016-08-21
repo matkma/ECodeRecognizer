@@ -11,31 +11,31 @@ namespace RecognitionEngine
 {
     public static class DataConverter
     {
-        public static double[] DigitToNetworkOutput(int digit)
+        public static bool[] DigitToBrainOutput(int digit)
         {
             if (digit >= 0 && digit <= 9)
             {
-                var output = Enumerable.Repeat(0.0, 16).ToArray();
-                output[digit] = 1;
+                var output = Enumerable.Repeat(false, 16).ToArray();
+                output[digit] = true;
                 return output;
             }
-            ErrorPipe.Instance.ErrorMessage(NeuralNetworkController.Instance, "Liczba podana do DataConverter wychodzi poza zakres [0, 9].");
+            ErrorPipe.Instance.ErrorMessage(RecognitionController.Instance, "Liczba podana do DataConverter wychodzi poza zakres [0, 9].");
             return null;
         }
 
-        public static string NetworkOutputToDigit(IEnumerable<double> output)
+        public static string BrainOutputToDigit(IEnumerable<bool> output)
         {
-            var digit = output.ToList().IndexOf(output.Max());
+            var digit = output.ToList().IndexOf(true);
             if (digit < 0 || digit > 9)
             {
-                ErrorPipe.Instance.ErrorMessage(NeuralNetworkController.Instance, "Błąd sieci! Rozpoznana cyfra jest poza zakresem [0, 9].");
+                ErrorPipe.Instance.ErrorMessage(RecognitionController.Instance, "Błąd sieci! Rozpoznana cyfra jest poza zakresem [0, 9].");
             }
             return digit.ToString();
         }
 
-        public static double[] NetworkInputFromBitmap(Bitmap bitmap)
+        public static bool[] BrainInputFromBitmap(Bitmap bitmap)
         {
-            var result = new double[bitmap.Height*bitmap.Width];
+            var result = new bool[bitmap.Height*bitmap.Width];
             for (int x = 0; x < bitmap.Width; x++)
             {
                 for (int y = 0; y < bitmap.Height; y++)
@@ -46,13 +46,13 @@ namespace RecognitionEngine
             return result;
         }
 
-        public static double[] NetworkInputFromMat(Mat mat)
+        public static bool[] BrainInputFromMat(Mat mat)
         {
             var byte3Col = new MatOfByte3(mat);
             var indexer = byte3Col.GetIndexer();
             var pixel = indexer[0, 1];
 
-            var result = new double[mat.Height*mat.Width];
+            var result = new bool[mat.Height*mat.Width];
             for (int x = 0; x < mat.Width; x++)
             {
                 for (int y = 0; y < mat.Height; y++)
@@ -63,16 +63,31 @@ namespace RecognitionEngine
             return result;
         }
 
-        private static double GetPixelValue(Color pixel)
+        public static string BoolArrayToString(bool[] input)
         {
-            var value = (pixel.R + pixel.G + pixel.B);
-            return value >= 382 ? 1 : 0;
+            var builder = new StringBuilder();
+            foreach (bool value in input)
+            {
+                builder.Append(value ? "t" : "f");
+            }
+            return builder.ToString();
         }
 
-        private static double GetIndexerValue(Vec3b pixel)
+        public static bool[] StringToBoolArray(string input)
+        {
+            return input.Select(c => c == 't').ToArray();
+        }
+
+        private static bool GetPixelValue(Color pixel)
+        {
+            var value = (pixel.R + pixel.G + pixel.B);
+            return value >= 382;
+        }
+
+        private static bool GetIndexerValue(Vec3b pixel)
         {
             var value = (pixel.Item0 + pixel.Item1 + pixel.Item2);
-            return value >= 382 ? 1 : 0;
+            return value >= 382;
         }
     }
 }

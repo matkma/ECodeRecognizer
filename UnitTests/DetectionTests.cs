@@ -1,12 +1,15 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Input;
+using PreparationEngine;
 using DetectionEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenCvSharp.CPlusPlus;
 using Point = OpenCvSharp.CPlusPlus.Point;
 using Size = OpenCvSharp.CPlusPlus.Size;
+using System.Collections.Generic;
 
 namespace UnitTests
 {
@@ -23,6 +26,39 @@ namespace UnitTests
         public void DetectionEngineTest2()
         {
             Test(2);
+        }
+
+        [TestMethod]
+        public void FullDetectionTest1()
+        {
+            FullTest(1);
+        }
+
+        [TestMethod]
+        public void FullDetectionTest2()
+        {
+            FullTest(2);
+        }
+
+        private void FullTest(int test)
+        {
+            var engine1 = new PreparationEngine.Engine();
+            var mats = engine1.Process(new Bitmap(@"D:\Projektz\inżynierka\ECodeRecognizer\UnitTests\Test\TestData\PreparationTests\" + test + @"\test.jpg"));
+            var engine2 = new DetectionEngine.Engine();
+            var output = engine2.Process(mats);
+            bool result = true;
+            foreach (var detected in output)
+            {
+                using (new Window(GetType().ToString() + " (wciśnij ENTER jeśli obraz jest poprawny)", detected))
+                {
+                    if ((Key)Cv2.WaitKey() != Key.Escape)
+                    {
+                        result = false;
+                    }
+                }
+            }
+
+            Assert.IsTrue(result, "Wynik niezgodny z oczekiwaniami.");
         }
 
         private void Test(int test)

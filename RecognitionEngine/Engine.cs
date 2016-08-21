@@ -23,7 +23,7 @@ namespace RecognitionEngine
             string output = "";
             foreach (var mat in input)
             {
-                output += NeuralNetworkController.Instance.CalculateOutput(mat);
+                output += RecognitionController.Instance.CalculateOutput(mat);
             }
             return int.Parse(output.Trim());
         }

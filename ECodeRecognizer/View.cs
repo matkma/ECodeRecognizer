@@ -45,7 +45,9 @@ namespace ECodeRecognizer
         {
             if (_image != null)
             {
+                DateTime d = DateTime.Now;
                 _engine.Input(_image);
+                Console.WriteLine((DateTime.Now - d).TotalMilliseconds);
             }
         }
 

@@ -11,15 +11,15 @@ namespace RecognitionEngine
 {
     internal class Teacher
     {
-        private BackPropogationNetwork network;
+        private Brain brain;
 
-        public void TrainNetwork(List<DataSet> data, BackPropogationNetwork inputNetwork)
+        public void Train(List<bool[]> input, bool[] output, Brain student)
         {
-            network = inputNetwork;
+            brain = student;
             BackgroundWorker teacher = new BackgroundWorker();
             teacher.DoWork += delegate
             {
-                network.BatchBackPropogate(data.ToArray(), 40, 0.5, 0.2, teacher);
+                brain.LearnPatterns(input, output);
             };
 
             teacher.WorkerReportsProgress = true;
@@ -30,12 +30,7 @@ namespace RecognitionEngine
         private void TrainingCompleted(object sender, EventArgs e)
         {
             MessageBox.Show("Uczenie zakończone", "Uwaga!", MessageBoxButtons.OK);
-            SaveNetwork();
-        }
-
-        private void SaveNetwork()
-        {
-            NeuralNetwork.SaveNetworkToFile(network.GetNetworkData(), @"Data/Network.xml");
+            brain.SaveToFile();
         }
     }
 }

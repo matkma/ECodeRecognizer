@@ -18,8 +18,8 @@ namespace UnitTests
             Bitmap bmp = new Bitmap(@"D:\Projektz\inżynierka\Szablon Inputu Sieci\0\022.bmp");
             Mat mat = BitmapConverter.ToMat(bmp);
 
-            var data1 = DataConverter.NetworkInputFromBitmap(bmp);
-            var data2 = DataConverter.NetworkInputFromMat(mat);
+            var data1 = DataConverter.BrainInputFromBitmap(bmp);
+            var data2 = DataConverter.BrainInputFromMat(mat);
 
             for(int i = 0; i < data1.Length; i++)
             {

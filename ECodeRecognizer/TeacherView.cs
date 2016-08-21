@@ -76,7 +76,7 @@ namespace ECodeRecognizer
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            NeuralNetworkController.Instance.TrainNetwork(bitmapList, digit);
+            RecognitionController.Instance.TrainEngine(bitmapList, digit);
         }
 
         private bool BoxContainsDigit()
