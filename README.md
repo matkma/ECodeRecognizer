@@ -1,2 +1,1 @@
 # ECodeRecognizer
-My BSc thesis
